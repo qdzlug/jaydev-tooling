@@ -10,7 +10,7 @@ terraform {
 provider "proxmox" {
   pm_api_url = "https://192.168.212.101:8006/api2/json"
   pm_user = "root@pam"
-  pm_password = "DrummerBoy1997"
+  pm_password = var.pm_password
   pm_tls_insecure = "true"
 }
 
@@ -24,10 +24,21 @@ variable "vm_count" {
   type = number
 }
 
+variable "template" {
+  description = "The template to use for creating the VMs."
+  type = string
+}
+
+variable "pm_password" {
+  description = "The password for the Proxmox API."
+  type = string
+  sensitive = true
+}
+
 resource "proxmox_vm_qemu" "proxmox_vm" {
   count = var.vm_count
   name = "tf-vm-${count.index}"
-  clone = "kinetic-template"
+  clone = var.template
   os_type = "cloud-init"
   target_node = var.node[count.index % length(var.node)]
   cores = "4"
