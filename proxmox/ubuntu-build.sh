@@ -7,6 +7,18 @@
 # Proxmox VMs with cloud-init enabled. It sets up DHCP for all network
 # interfaces and sets a username, password, and SSH key for each VM.
 
+# Display usage information
+usage() {
+    echo "Usage: $0 [-u username] [-p password] [-k sshkey]"
+    echo
+    echo "Options:"
+    echo "  -u  Specify the username for the VM."
+    echo "  -p  Specify the password for the VM."
+    echo "  -k  Specify the path to the SSH public key."
+    echo "  -h  Display this help message."
+    exit 1
+}
+
 # Array of Ubuntu versions
 versions=("bionic" "jammy" "kinetic" "lunar" "focal")
 
@@ -20,13 +32,14 @@ vmid=9100
 storage="ceph01"
 
 # Parse command-line arguments for username, password, and SSH key path
-while getopts u:p:k: flag; do
-  case "${flag}" in
-  u) username=${OPTARG} ;;
-  p) password=${OPTARG} ;;
-  k) sshkey=${OPTARG} ;;
-  *) echo "Invalid flag passed" ;;
-  esac
+while getopts u:p:k:h flag; do
+    case "${flag}" in
+        u) username=${OPTARG} ;;
+        p) password=${OPTARG} ;;
+        k) sshkey=${OPTARG} ;;
+        h) usage ;;
+        *) usage ;;
+    esac
 done
 
 # If variables are not provided as command-line arguments, prompt the user for them
