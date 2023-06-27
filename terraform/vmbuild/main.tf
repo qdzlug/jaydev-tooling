@@ -7,11 +7,42 @@ terraform {
   }
 }
 
+variable "pm_api_url" {
+  description = "The API URL for the Proxmox provider."
+  type = string
+}
+
+variable "pm_user" {
+  description = "The user for the Proxmox provider."
+  type = string
+}
+
+variable "pm_password" {
+  description = "The password for the Proxmox provider."
+  type = string
+  sensitive = true
+}
+
+variable "pm_tls_insecure" {
+  description = "Whether to disable TLS verification for the Proxmox provider."
+  type = string
+}
+
 provider "proxmox" {
-  pm_api_url = "https://192.168.212.101:8006/api2/json"
-  pm_user = "root@pam"
+  pm_api_url = var.pm_api_url
+  pm_user = var.pm_user
   pm_password = var.pm_password
-  pm_tls_insecure = "true"
+  pm_tls_insecure = var.pm_tls_insecure
+}
+
+variable "storage" {
+  description = "The storage to use for the VMs."
+  type = string
+}
+
+variable "name_prefix" {
+  description = "The prefix for the name of the VMs."
+  type = string
 }
 
 variable "node" {
@@ -29,30 +60,30 @@ variable "template" {
   type = string
 }
 
-variable "pm_password" {
-  description = "The password for the Proxmox API."
+variable "ssh_keys" {
+  description = "The SSH keys to use for the VMs."
   type = string
-  sensitive = true
 }
+
 
 resource "proxmox_vm_qemu" "proxmox_vm" {
   count = var.vm_count
-  name = "tf-vm-${count.index}"
+  name = "${var.name_prefix}-${count.index}"
   clone = var.template
   os_type = "cloud-init"
   target_node = var.node[count.index % length(var.node)]
   cores = "4"
   sockets = "1"
   cpu = "host"
-  memory = 8096
+  memory = 8192
   scsihw = "virtio-scsi-pci"
   bootdisk = "scsi0"
-  agent = 0
+  agent = 1
 
   disk {
-    size = "128G"
+    size = "130G"
     type = "scsi"
-    storage = "ceph01"
+    storage = var.storage
     iothread = 0
   }
 
@@ -67,7 +98,5 @@ resource "proxmox_vm_qemu" "proxmox_vm" {
     ]
   }
 
-  sshkeys = <<EOF
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh6ROxdnUrSAmjyqzlpvcSFlXcSwD7VMp7PvCTzAtDePSluBiQq3njWW88Pcxgmhsqhsm/ZjRKTdFO5RWRt2YM3BsZQqIMlsulIKK426RavgtnMYpJuUhTkyVm1QQAaoOH4NvkBOk35VOWylzxSZFa2v+LExjOQzQM5CfXB2GX7KerNNvEMNuTnFQ5upuV8YOEeeeomfLmt/I8VMxFJiSQWlELkS2NBVbhWKHcRaE2T2X2eASaruqlDhSMgeE0K/8bRuLquvv5j0F3rQ6slbVi0zjdIMRUlwD4gsZOQaSiFrQceItR+slp3/2FT/o6uxW/lJu3sW5RkHNHMxubSFpl jschmidt@jack.virington.com
-EOF
+  sshkeys = var.ssh_keys
 }
