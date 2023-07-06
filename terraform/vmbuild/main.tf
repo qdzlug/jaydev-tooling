@@ -68,7 +68,7 @@ variable "ssh_keys" {
 
 resource "proxmox_vm_qemu" "proxmox_vm" {
   count = var.vm_count
-  name = "${var.name_prefix}-${count.index}"
+  name = "${var.name_prefix}${count.index}"
   clone = var.template
   os_type = "cloud-init"
   target_node = var.node[count.index % length(var.node)]
