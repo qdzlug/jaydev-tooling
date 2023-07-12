@@ -1,0 +1,70 @@
+# This playbook is divided into two parts. The first part is executed as root and the second part as the user 'jschmidt'.
+
+# Part 1: Executed as root
+- hosts: all
+  remote_user: root
+  gather_facts: true
+  become_method: sudo
+  become: true
+  tasks:
+
+    # Include our necessary variables
+    - name: Include variables from vars.yaml
+      include_vars: vars.yaml
+
+    # Update and upgrade apt packages
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 # Cache valid for one day
+
+    - name: Make sure we have a '{{ user_group }}' group
+      group:
+        name: "{{ user_group }}"
+        state: present
+
+    - name: Add the user '{{ user_name }}' with a specific uid and a primary group of '{{ user_group }}'
+      user:
+        name: "{{ user_name }}"
+        comment: User
+        group: "{{ user_group }}"
+        shell: "{{ user_shell }}"
+
+    - name: sudo without password for '{{ user_group }}' group
+      copy:
+        content: "{{ sudoers_content }}"
+        dest: "/etc/sudoers.d/{{ user_name }}"
+        mode: 0440
+
+    - name: Set authorized keys taken from url
+      ansible.posix.authorized_key:
+        user: "{{ user_name }}"
+        state: present
+        key: "{{ authorized_keys_url }}"
+
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: "{{ required_packages }}"
+
+    - name: Create .tool-versions file
+      template:
+        src: tool-versions.j2
+        dest: "/home/{{ user_name }}/.tool-versions"
+      become: yes
+      become_user: "{{ user_name }}"
+
+
+# Part 2: Executed as our user
+- hosts: all
+  remote_user: root
+  gather_facts: true
+  become_method: sudo
+  become: true
+  roles:
+    - role: cimon-io.asdf
+  tasks:
+    - name: Include variables from vars.yaml
+      include_vars: vars.yaml
+

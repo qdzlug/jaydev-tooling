@@ -1,0 +1,5 @@
+/terraform/vmbuild/terraform.tfstate
+/terraform/vmbuild/terraform.tfstate.backup
+/terraform/vmbuild/.terraform.lock.hcl
+/terraform/vmbuild/variables.tfvars
+/terraform/vmbuild/.terraform/

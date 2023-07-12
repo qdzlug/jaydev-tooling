@@ -1,0 +1,8 @@
+[all:vars]
+# Specify the Python interpreter
+ansible_python_interpreter=/usr/bin/python3
+# Automatically accept host SSH keys
+ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+
+[group_name]
+host_name
