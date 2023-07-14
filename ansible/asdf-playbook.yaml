@@ -67,4 +67,3 @@
   tasks:
     - name: Include variables from vars.yaml
       include_vars: vars.yaml
-
