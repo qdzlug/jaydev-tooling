@@ -1,10 +1,15 @@
-pm_api_url = "https://your_proxmox_api_url"
-pm_user = "your_proxmox_user"
-pm_password = "your_proxmox_password"
-pm_tls_insecure = "true_or_false"
-node = ["node1", "node2"]
-vm_count = 4
-template = "your_template_name"
-ssh_keys = "your_ssh_public_key"
-name_prefix = "your_name_prefix"
-storage = "your_storage_name"
+# Proxmox API configuration
+pm_api_url      = "https://<proxmox-api-url>"
+pm_user         = "<username>@<auth-realm>"
+pm_password     = "<password>"
+pm_tls_insecure = "<true-or-false>"
+
+# VM configuration
+vm_count    = <number-of-vms>
+name_prefix = "<vm-name-prefix>"
+template    = "<template-location>"
+storage     = "<storage-location>"
+ssh_keys    = "<ssh-public-key>"
+
+# Node configuration
+node = ["<node1>", "<node2>", "<node3>"]
