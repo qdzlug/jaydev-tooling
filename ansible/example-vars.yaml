@@ -24,7 +24,9 @@ asdf_plugins:
     global: '<global_version2>'
   # Add more plugins as needed
 
-# Required packages
+# Required packages; note if you are connecting as a non-root user you
+# will need to add the "acl" package for things to work properly.
+#
 required_packages:
   - '<package1>'
   - '<package2>'
