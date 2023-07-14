@@ -66,7 +66,7 @@ remotely a bit easier.
 #### VPN and Remote Access
 For the longest time I used OpenVPN to connect into my environment remotely, along with a few ssh ports that I passed
 in from the PFSense box. However, that all changed when I discovered [tailscale](https://tailscale.com). This 
-[Wireguard}(https://www.wireguard.com/) implementation makes remote networking a breeze. I run it on all my systems, 
+[Wireguard](https://www.wireguard.com/) implementation makes remote networking a breeze. I run it on all my systems, 
 and also have a gateway node on my home network so I can connect to devices without OpenVPN. It has been a life
 changer; no disrespect to OpenVPN as it's been a solid product for years, but Tailscale is much, much easier.
 
