@@ -3,8 +3,16 @@
 /terraform/vmbuild/.terraform.lock.hcl
 /terraform/vmbuild/variables.tfvars
 /terraform/vmbuild/.terraform/
-!/terraform/ctbuild/.terraform/
-!/terraform/ctbuild/.terraform.lock.hcl
-!/terraform/ctbuild/terraform.tfstate
+/ansible/vars.yaml
 
-!/terraform/ctbuild/terraform.tfstate.backup
+terraform/ctbuild/.terraform.lock.hcl
+
+terraform/vmbuild/.terraform.tfstate.lock.info
+
+terraform/ctbuild/terraform.tfstate.backup
+
+terraform/ctbuild/terraform.tfstate
+
+terraform/ctbuild/variables.tfvars
+
+terraform/ctbuild/.terraform/providers/
