@@ -1,25 +1,32 @@
-required_packages:
-  - 'package1'
-  - 'package2'
-  - 'package3'
-  # Add more packages as needed
-user_name: 'your_username'
-user_group: 'your_group'
-user_shell: '/path/to/your/shell'
-sudoers_content: '%your_group ALL=(ALL:ALL) NOPASSWD:ALL'
-authorized_keys_url: 'https://your_url_for_authorized_keys'
+# User configuration
+user_name: '<username>'
+user_group: '<group>'
+user_shell: '<shell_path>'
+sudoers_content: '%<group> ALL=(ALL:ALL) NOPASSWD:ALL'
+authorized_keys_url: '<authorized_keys_url>'
+
+# ASDF configuration
 asdf_init_shell: true
-asdf_version: "your_asdf_version"
+asdf_version: '<asdf_version>'
+asdf_user: '<asdf_user>'
+asdf_group: '<asdf_group>'
+asdf_default_tool_versions_file: '<tool_versions_file_path>'
+
+# ASDF plugins configuration
 asdf_plugins:
-  - name: "plugin1"
+  - name: '<plugin1>'
     versions:
-      - "version1"
-    global: "global_version1"
-  - name: "plugin2"
+      - '<version1>'
+    global: '<global_version1>'
+  - name: '<plugin2>'
     versions:
-      - "version2"
-    global: "global_version2"
+      - '<version2>'
+    global: '<global_version2>'
   # Add more plugins as needed
-asdf_user: 'your_asdf_user'
-asdf_group: 'your_asdf_group'
-asdf_default_tool_versions_file: "path_to_your_tool_versions_file"
+
+# Required packages
+required_packages:
+  - '<package1>'
+  - '<package2>'
+  - '<package3>'
+  # Add more packages as needed
