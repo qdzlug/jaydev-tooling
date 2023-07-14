@@ -126,3 +126,10 @@ resource "proxmox_lxc" "example_container" {
     ip6     = "auto"
   }
 }
+
+
+output "container_name" {
+  description = "The names of the created containers"
+  value       = [for i in proxmox_lxc.example_container : i.hostname]
+}
+
