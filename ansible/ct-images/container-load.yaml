@@ -1,0 +1,25 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Update the list of container images
+      command: pveam update
+      become: yes
+
+    - name: Get list of available templates
+      shell: "pveam available"
+      register: available_templates
+
+    - name: Download templates
+      shell: "pveam download iris {{ item.split()[1] }}"
+      loop: "{{ available_templates.stdout_lines }}"
+      ignore_errors: yes
+      become: yes
+
+    - name: List all installed container templates
+      shell: "pveam list local"
+      register: installed_templates
+
+    - name: Output all installed container templates
+      debug:
+        var: installed_templates.stdout_lines

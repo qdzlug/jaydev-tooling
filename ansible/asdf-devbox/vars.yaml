@@ -1,0 +1,55 @@
+# vars.yml
+required_packages:
+  - 'zsh'
+  - 'build-essential'
+  - 'curl'
+  - 'jq'
+  - 'libbz2-dev'
+  - 'libffi-dev'
+  - 'liblzma-dev'
+  - 'libncursesw5-dev'
+  - 'libreadline-dev'
+  - 'libsqlite3-dev'
+  - 'libssl-dev'
+  - 'libxml2-dev'
+  - 'libxmlsec1-dev'
+  - 'llvm'
+  - 'make'
+  - 'tk-dev'
+  - 'wget'
+  - 'xz-utils'
+  - 'zlib1g-dev'
+  - 'unzip'
+  - 'python3'
+  - 'acl'
+user_name: 'jschmidt'
+user_group: 'jschmidt'
+user_shell: '/bin/bash'
+sudoers_content: '%jschmidt ALL=(ALL:ALL) NOPASSWD:ALL'
+authorized_keys_url: 'https://github.com/qdzlug.keys'
+asdf_init_shell: true
+asdf_version: "v0.12.0"
+asdf_plugins:
+  - name: "python"
+    versions:
+      - "3.9.16"
+    global: "3.9.16"
+  - name: "chezmoi"
+    versions:
+      - "2.17.0"
+    global: "2.17.0"
+  - name: "zoxide"
+    versions:
+      - "0.8.3"
+    global: "0.8.3"
+  - name: "ansible-base"
+    versions:
+      - "2.10.17"
+    global: "2.10.17"
+  - name: "terraform"
+    versions:
+      - "1.4.6"
+    global: "1.4.6"
+asdf_user: 'jschmidt'
+asdf_group: 'jschmidt'
+asdf_default_tool_versions_file: ".tool-versions"
