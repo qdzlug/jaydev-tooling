@@ -1,0 +1,53 @@
+---
+# This playbook updates systems running the Portainer agent and Node Exporter.
+# It pulls the latest images for both services and ensures they are running.
+
+- hosts: all
+  become: true
+  tasks:
+    # Install the Docker Python module to allow Ansible to interact with Docker
+    - name: Install the Docker module for Python
+      pip:
+        name: docker
+        executable: pip3
+
+    # Pull the latest image for the Portainer agent
+    - name: Pull the latest Portainer agent image
+      docker_image:
+        source: pull
+        name: portainer/agent
+        tag: latest
+
+    # Pull the latest image for the Node Exporter
+    - name: Pull the latest Node Exporter image
+      docker_image:
+        source: pull
+        name: prom/node-exporter
+        tag: latest
+
+    # Ensure the Portainer agent container is running with the latest image
+    - name: Run or restart the Portainer agent
+      docker_container:
+        name: portainer_agent
+        image: portainer/agent:latest
+        state: started
+        restart: yes
+        recreate: yes
+        restart_policy: always
+        published_ports:
+          - 9001:9001
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /var/lib/docker/volumes:/var/lib/docker/volumes
+
+    # Ensure the Node Exporter container is running with the latest image
+    - name: Run or restart the Node Exporter
+      docker_container:
+        name: node-exporter
+        image: prom/node-exporter:latest
+        state: started
+        restart: yes
+        recreate: yes
+        restart_policy: always
+        published_ports:
+          - 9100:9100

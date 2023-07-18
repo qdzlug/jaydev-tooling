@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist
+
+    - name: Gather facts
+      setup:
+
+    - name: Display OS information
+      debug:
+        msg: "Operating System: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+
+    - name: Display memory usage
+      debug:
+        msg: "Total Memory: {{ ansible_memtotal_mb }} MB, Free Memory: {{ ansible_memfree_mb }} MB"
+
+    - name: Display disk usage
+      shell: df -h /
+      register: disk_usage
+
+    - name: Show disk usage
+      debug:
+        msg: "{{ disk_usage.stdout_lines }}"
+
+    - name: Check CPU load
+      shell: uptime
+      register: cpu_load
+
+    - name: Show CPU load
+      debug:
+        msg: "{{ cpu_load.stdout }}"
