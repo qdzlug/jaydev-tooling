@@ -3,7 +3,7 @@
 /terraform/vmbuild/.terraform.lock.hcl
 /terraform/vmbuild/variables.tfvars
 /terraform/vmbuild/.terraform/
-/ansible/vars.yaml
+/ansible/asdf-devbox/default/vars.yaml
 
 terraform/ctbuild/.terraform.lock.hcl
 
