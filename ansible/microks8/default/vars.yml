@@ -1,0 +1,4 @@
+---
+# vars/default.yml
+user_name: kube
+user_group: kube

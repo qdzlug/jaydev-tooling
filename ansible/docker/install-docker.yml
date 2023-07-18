@@ -1,0 +1,40 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Update the apt package index and install packages to allow apt to use a repository over HTTPS
+      apt:
+        name: "{{ item }}"
+        state: latest
+        update_cache: yes
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+
+    - name: Add Docker’s official GPG key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Set up the stable Docker repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+        state: present
+
+    - name: Update the apt package index, and install the latest version of Docker Engine and containerd
+      apt:
+        update_cache: yes
+        name: docker-ce docker-ce-cli containerd.io
+        state: latest
+
+    - name: Add "{{ user_name }}" to docker group
+      user:
+        name: "{{ user_name }}"
+        groups: docker
+        append: yes

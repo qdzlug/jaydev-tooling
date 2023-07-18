@@ -12,6 +12,12 @@
     - name: Include variables from vars.yaml
       include_vars: vars.yaml
 
+    # Reconfigure any packages
+    # This fixes an issue from the way we build templates
+    - name: Reconfigure dpkg
+      ansible.builtin.command: dpkg --configure -a
+      become: yes
+
     # Update and upgrade apt packages
     - name: Update and upgrade apt packages
       become: true

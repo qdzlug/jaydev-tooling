@@ -1,0 +1,69 @@
+---
+# This playbook installs microk8s on all hosts
+# This is highly opinionated and does things the way I like them, which may not be the way you like them.
+
+- hosts: all
+  remote_user: root
+  gather_facts: false
+  vars_files:
+    - vars/default.yml
+  tasks:
+    # Update and install necessary packages
+    - name: Update and install Python, Python3, setuptools, pip, aptitude, qemu-guest-agent, magic-wormhole, lsb-release, python3-apt, python-apt-common
+      raw: apt -y update && apt install -y python python3 python-setuptools python3-pip aptitude qemu-guest-agent magic-wormhole lsb-release python3-apt python-apt-common
+
+    # Enable qemu-guest-agent service
+    - name: Enable guest agent
+      service:
+        name: qemu-guest-agent
+        enabled: yes
+        state: started
+
+    # Update and upgrade apt packages
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 # Cache valid for one day
+
+    # Create a new group
+    - name: Make sure we have a '{{ user_group }}' group
+      group:
+        name: "{{ user_group }}"
+        state: present
+
+    # Create a new user and add it to the group
+    - name: Add the user '{{ user_name }}' with a specific uid and a primary group of '{{ user_group }}'
+      user:
+        name: "{{ user_name }}"
+        comment: User
+        group: "{{ user_group }}"
+
+    # Allow the group to execute sudo commands without a password
+    - name: sudo without password for '{{ user_group }}' group
+      copy:
+        content: '%{{ user_group }} ALL=(ALL:ALL) NOPASSWD:ALL'
+        dest: "/etc/sudoers.d/{{ user_name }}_nopasswd"
+        mode: 0440
+
+    # Install microk8s using snap
+    - name: Install "microk8s" with option --classic
+      snap:
+        name: microk8s
+        classic: yes
+        state: present
+
+    # Install k9s using snap
+    - name: Install "k9s" with option --classic
+      snap:
+        name: k9s
+        classic: yes
+        state: present
+
+    # Install kubectx using snap
+    - name: Install "kubectx" with option --classic
+      snap:
+        name: kubectx
+        classic: yes
+        state: present
