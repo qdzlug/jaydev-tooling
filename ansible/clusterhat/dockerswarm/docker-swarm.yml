@@ -1,0 +1,47 @@
+---
+- hosts: raspberry_pis
+  become: yes
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install necessary packages
+      apt:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg2
+          - software-properties-common
+
+    - name: Add Docker's official GPG key
+      shell: curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | sudo apt-key add -
+
+    - name: Verify the key with the fingerprint
+      shell: apt-key fingerprint 0EBFCD88
+
+    - name: Set up the Docker stable repository
+      shell: echo "deb [arch=armhf] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+
+    - name: Update the apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install Docker CE
+      apt:
+        name: docker-ce
+        state: latest
+
+    - name: Verify Docker CE is installed correctly
+      shell: docker run hello-world
+
+    - name: Add iptables rule to crontab
+      cron:
+        name: "iptables rule"
+        special_time: reboot
+        job: "sudo iptables -A FORWARD -i br0 -o br0 -j ACCEPT"

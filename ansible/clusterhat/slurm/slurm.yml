@@ -1,0 +1,292 @@
+---
+- hosts: cluster
+  become: yes
+  tasks:
+
+    - name: Add hosts to /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ item.ip }} {{ item.host }}"
+        state: present
+      loop:
+        - { ip: '172.19.181.254', host: 'controller' }
+        - { ip: '172.19.181.1', host: 'pi1' }
+        - { ip: '172.19.181.2', host: 'pi2' }
+        - { ip: '172.19.181.3', host: 'pi3' }
+        - { ip: '172.19.181.4', host: 'pi4' }
+      when: item.host != inventory_hostname
+
+    - name: Add loopback to /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "127.0.0.1 {{ inventory_hostname }}"
+        state: present
+
+    - name: Install nfs-common
+      apt:
+        name: nfs-common
+        state: present
+
+    - name: Install NFS server on controller
+      apt:
+        name: nfs-kernel-server
+        state: present
+      when: inventory_hostname == 'controller'
+
+    - name: Create NFS directory
+      file:
+        path: /media/Storage
+        state: directory
+        owner: nobody
+        group: nogroup
+        mode: '0777'
+      when: inventory_hostname == 'controller'
+
+    - name: Update /etc/exports
+      lineinfile:
+        path: /etc/exports
+        line: '/media/Storage 172.19.181.0/24(rw,sync,no_subtree_check)'
+      when: inventory_hostname == 'controller'
+
+    - name: Restart NFS server
+      systemd:
+        name: nfs-kernel-server
+        state: restarted
+      when: inventory_hostname == 'controller'
+
+    - name: Create mount directory
+      file:
+        path: /media/Storage
+        state: directory
+        owner: nobody
+        group: nogroup
+        mode: '0777'
+      when: inventory_hostname != 'controller'
+
+    - name: Add NFS mount to fstab
+      lineinfile:
+        path: /etc/fstab
+        line: '172.19.181.254:/media/Storage /media/Storage nfs defaults 0 0'
+      when: inventory_hostname != 'controller'
+
+    - name: Mount NFS share on nodes
+      mount:
+        path: /media/Storage
+        src: '172.19.181.254:/media/Storage'
+        fstype: nfs
+        opts: defaults
+        state: mounted
+      when: inventory_hostname != 'controller'
+
+    - name: Install munge
+      apt:
+        name: munge
+        state: present
+
+    - name: Enable and start munge service
+      systemd:
+        name: munge
+        enabled: yes
+        state: started
+
+    - name: Copy Munge key to shared directory
+      copy:
+        src: /etc/munge/munge.key
+        dest: /media/Storage/munge.key
+        owner: munge
+        group: munge
+        mode: '0444'
+        remote_src: yes
+      when: inventory_hostname == 'controller'
+
+    - name: Copy munge key from NFS to node
+      copy:
+        src: /media/Storage/munge.key
+        dest: /etc/munge/munge.key
+        owner: munge
+        group: munge
+        mode: '0600'
+        remote_src: yes
+      when: inventory_hostname != 'controller'
+
+    - name: Check munge key permissions
+      command: ls -la /etc/munge
+      register: result
+      changed_when: false
+      when: inventory_hostname != 'controller'
+      failed_when: "'munge munge' not in result.stdout"
+
+    # We are going to need to restart munge to pick up
+    # the new key on non-controllers
+    - name: Restart MUNGE service
+      ansible.builtin.systemd:
+        name: munge
+        state: restarted
+        daemon_reload: yes
+      become: yes
+      when: inventory_hostname != 'controller'
+
+    - name: Install slurm-wlm on controller
+      apt:
+        name:
+          - slurm-wlm
+          - slurmd
+          - slurm-client
+          - slurm
+          - slurmrestd
+          - slurmdbd
+        state: present
+      when: inventory_hostname == 'controller'
+
+    - name: Install slurmd and slurm-client on nodes
+      apt:
+        name:
+          - slurmd
+          - slurm-client
+          - slurm
+          - slurmrestd
+          - slurmdbd
+        state: present
+      when: inventory_hostname != 'controller'
+
+    - name: Ensure /etc/slurm/slurm.conf exists
+      become: yes
+      file:
+        path: /etc/slurm/slurm.conf
+        state: touch
+
+    - name: Ensure /etc/slurm/cgroup.conf exists
+      become: yes
+      file:
+        path: /etc/slurm/cgroup.conf
+        state: touch
+
+    - name: Ensure /etc/slurm/cgroup_allowed_devices_file.conf exists
+      become: yes
+      file:
+        path: /etc/slurm/cgroup_allowed_devices_file.conf
+        state: touch
+
+    - name: Set SlurmctldHost in slurm.conf
+      lineinfile:
+        path: /etc/slurm/slurm.conf
+        regexp: '^SlurmctldHost='
+        line: 'SlurmctldHost=cnat'
+      when: inventory_hostname == 'controller'
+
+    - name: Set SelectType and SelectTypeParameters in slurm.conf
+      lineinfile:
+        path: /etc/slurm/slurm.conf
+        regexp: '^{{ item.key }}='
+        line: '{{ item.key }}={{ item.value }}'
+      loop:
+        - { key: 'SelectType', value: 'select/cons_res' }
+        - { key: 'SelectTypeParameters', value: 'CR_Core' }
+      when: inventory_hostname == 'controller'
+
+    - name: Set ClusterName in slurm.conf
+      lineinfile:
+        path: /etc/slurm/slurm.conf
+        regexp: '^ClusterName='
+        line: 'ClusterName=cluster'
+      when: inventory_hostname == 'controller'
+
+    - name: Set NodeName in slurm.conf
+      blockinfile:
+        path: /etc/slurm/slurm.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          NodeName=p0 NodeAddr=172.19.181.254 CPUs=2 Weight=2 State=UNKNOWN
+          NodeName=p1 NodeAddr=172.19.181.1 CPUs=1 Weight=1 State=UNKNOWN
+          NodeName=p2 NodeAddr=172.19.181.2 CPUs=1 Weight=1 State=UNKNOWN
+          NodeName=p3 NodeAddr=172.19.181.3 CPUs=1 Weight=1 State=UNKNOWN
+          NodeName=p4 NodeAddr=172.19.181.4 CPUs=1 Weight=1 State=UNKNOWN
+      when: inventory_hostname == 'controller'
+
+    - name: Set PartitionName in slurm.conf
+      lineinfile:
+        path: /etc/slurm/slurm.conf
+        regexp: '^PartitionName='
+        line: 'PartitionName=mycluster Nodes=p[1–4] Default=YES MaxTime=INFINITE State=UP'
+      when: inventory_hostname == 'controller'
+
+    - name: Create and populate cgroup.conf
+      copy:
+        dest: /etc/slurm/cgroup.conf
+        content: |
+          CgroupMountpoint="/sys/fs/cgroup"
+          CgroupAutomount=yes
+          CgroupReleaseAgentDir="/etc/slurm/cgroup"
+          AllowedDevicesFile="/etc/slurm/cgroup_allowed_devices_file.conf"
+          ConstrainCores=no
+          TaskAffinity=no
+          ConstrainRAMSpace=yes
+          ConstrainSwapSpace=no
+          ConstrainDevices=no
+          AllowedRamSpace=100
+          AllowedSwapSpace=0
+          MaxRAMPercent=100
+          MaxSwapPercent=100
+          MinRAMSpace=30
+      when: inventory_hostname == 'controller'
+
+    - name: Create and populate cgroup_allowed_devices_file.conf
+      copy:
+        dest: /etc/slurm/cgroup_allowed_devices_file.conf
+        content: |
+          /dev/null
+          /dev/urandom
+          /dev/zero
+          /dev/sda*
+          /dev/cpu/*/*
+          /dev/pts/*
+          /media/Storage*
+      when: inventory_hostname == 'controller'
+
+    - name: Fix slurm.conf
+      ansible.builtin.lineinfile:
+        path: /etc/slurm/slurm.conf
+        regexp: '{{ item.regexp }}'
+        line: '{{ item.line }}'
+      loop:
+        - { regexp: '^MailProg', line: '#MailProg=/usr/sbin/sendmail' }
+        - { regexp: '^PartitionName', line: 'PartitionName=mycluster Nodes=p[1-4] Default=YES MaxTime=INFINITE State=UP' }
+
+    - name: Create /var/spool directory
+      ansible.builtin.file:
+        path: /var/spool
+        state: directory
+        mode: '0755'
+
+    - name: Copy slurm configuration files to NFS
+      copy:
+        src: /etc/slurm/{{ item }}
+        dest: /media/Storage/{{ item }}
+        remote_src: no
+      with_items:
+        - slurm.conf
+        - cgroup.conf
+        - cgroup_allowed_devices_file.conf
+
+    - name: Copy slurm configuration files from NFS to nodes
+      copy:
+        src: /media/Storage/{{ item }}
+        dest: /etc/slurm/{{ item }}
+        remote_src: yes
+      with_items:
+        - slurm.conf
+        - cgroup.conf
+        - cgroup_allowed_devices_file.conf
+
+    - name: Enable and start slurmd service
+      systemd:
+        name: slurmd
+        enabled: yes
+        state: started
+
+    - name: Enable and start slurmctld service on controller
+      systemd:
+        name: slurmctld
+        enabled: yes
+        state: started
+      when: inventory_hostname == 'controller'
