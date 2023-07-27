@@ -9,11 +9,11 @@
         line: "{{ item.ip }} {{ item.host }}"
         state: present
       loop:
-        - { ip: '172.19.181.254', host: 'controller' }
-        - { ip: '172.19.181.1', host: 'pi1' }
-        - { ip: '172.19.181.2', host: 'pi2' }
-        - { ip: '172.19.181.3', host: 'pi3' }
-        - { ip: '172.19.181.4', host: 'pi4' }
+        - { ip: '172.19.181.254', host: 'p0' }
+        - { ip: '172.19.181.1', host: 'p1' }
+        - { ip: '172.19.181.2', host: 'p2' }
+        - { ip: '172.19.181.3', host: 'p3' }
+        - { ip: '172.19.181.4', host: 'p4' }
       when: item.host != inventory_hostname
 
     - name: Add loopback to /etc/hosts
@@ -76,7 +76,7 @@
         fstype: nfs
         opts: defaults
         state: mounted
-      when: inventory_hostname != 'controller'
+      when: inventory_hostname != 'p0'
 
     - name: Install munge
       apt:
@@ -97,7 +97,7 @@
         group: munge
         mode: '0444'
         remote_src: yes
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Copy munge key from NFS to node
       copy:
@@ -107,13 +107,13 @@
         group: munge
         mode: '0600'
         remote_src: yes
-      when: inventory_hostname != 'controller'
+      when: inventory_hostname != 'p0'
 
     - name: Check munge key permissions
       command: ls -la /etc/munge
       register: result
       changed_when: false
-      when: inventory_hostname != 'controller'
+      when: inventory_hostname != 'p0'
       failed_when: "'munge munge' not in result.stdout"
 
     # We are going to need to restart munge to pick up
@@ -124,9 +124,9 @@
         state: restarted
         daemon_reload: yes
       become: yes
-      when: inventory_hostname != 'controller'
+      when: inventory_hostname != 'p0'
 
-    - name: Install slurm-wlm on controller
+    - name: Install slurm-wlm on p0
       apt:
         name:
           - slurm-wlm
@@ -136,7 +136,7 @@
           - slurmrestd
           - slurmdbd
         state: present
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Install slurmd and slurm-client on nodes
       apt:
@@ -147,32 +147,35 @@
           - slurmrestd
           - slurmdbd
         state: present
-      when: inventory_hostname != 'controller'
+      when: inventory_hostname != 'p0'
 
     - name: Ensure /etc/slurm/slurm.conf exists
       become: yes
       file:
         path: /etc/slurm/slurm.conf
         state: touch
+        mode: 0644
 
     - name: Ensure /etc/slurm/cgroup.conf exists
       become: yes
       file:
         path: /etc/slurm/cgroup.conf
         state: touch
+        mode: 0644
 
     - name: Ensure /etc/slurm/cgroup_allowed_devices_file.conf exists
       become: yes
       file:
         path: /etc/slurm/cgroup_allowed_devices_file.conf
         state: touch
+        mode: 0644
 
     - name: Set SlurmctldHost in slurm.conf
       lineinfile:
         path: /etc/slurm/slurm.conf
         regexp: '^SlurmctldHost='
         line: 'SlurmctldHost=cnat'
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Set SelectType and SelectTypeParameters in slurm.conf
       lineinfile:
@@ -182,14 +185,21 @@
       loop:
         - { key: 'SelectType', value: 'select/cons_res' }
         - { key: 'SelectTypeParameters', value: 'CR_Core' }
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Set ClusterName in slurm.conf
       lineinfile:
         path: /etc/slurm/slurm.conf
         regexp: '^ClusterName='
         line: 'ClusterName=cluster'
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
+
+    - name: Set SlurmctldHost name in slurm.conf
+      lineinfile:
+        path: /etc/slurm/slurm.conf
+        regexp: '^SlurmctldHost='
+        line: 'SlurmctldHost=p0'
+      when: inventory_hostname == 'p0'
 
     - name: Set NodeName in slurm.conf
       blockinfile:
@@ -201,14 +211,14 @@
           NodeName=p2 NodeAddr=172.19.181.2 CPUs=1 Weight=1 State=UNKNOWN
           NodeName=p3 NodeAddr=172.19.181.3 CPUs=1 Weight=1 State=UNKNOWN
           NodeName=p4 NodeAddr=172.19.181.4 CPUs=1 Weight=1 State=UNKNOWN
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Set PartitionName in slurm.conf
       lineinfile:
         path: /etc/slurm/slurm.conf
         regexp: '^PartitionName='
-        line: 'PartitionName=mycluster Nodes=p[1–4] Default=YES MaxTime=INFINITE State=UP'
-      when: inventory_hostname == 'controller'
+        line: 'PartitionName=mycluster Nodes=p[0–4] Default=YES MaxTime=INFINITE State=UP'
+      when: inventory_hostname == 'p0'
 
     - name: Create and populate cgroup.conf
       copy:
@@ -228,7 +238,8 @@
           MaxRAMPercent=100
           MaxSwapPercent=100
           MinRAMSpace=30
-      when: inventory_hostname == 'controller'
+        mode: '0644'
+      when: inventory_hostname == 'p0'
 
     - name: Create and populate cgroup_allowed_devices_file.conf
       copy:
@@ -241,7 +252,8 @@
           /dev/cpu/*/*
           /dev/pts/*
           /media/Storage*
-      when: inventory_hostname == 'controller'
+        mode: '0644'
+      when: inventory_hostname == 'p0'
 
     - name: Fix slurm.conf
       ansible.builtin.lineinfile:
@@ -250,7 +262,7 @@
         line: '{{ item.line }}'
       loop:
         - { regexp: '^MailProg', line: '#MailProg=/usr/sbin/sendmail' }
-        - { regexp: '^PartitionName', line: 'PartitionName=mycluster Nodes=p[1-4] Default=YES MaxTime=INFINITE State=UP' }
+        - { regexp: '^PartitionName', line: 'PartitionName=mycluster Nodes=p[0-4] Default=YES MaxTime=INFINITE State=UP' }
 
     - name: Create /var/spool directory
       ansible.builtin.file:
@@ -263,6 +275,7 @@
         src: /etc/slurm/{{ item }}
         dest: /media/Storage/{{ item }}
         remote_src: no
+        mode: '0644'
       with_items:
         - slurm.conf
         - cgroup.conf
@@ -273,6 +286,7 @@
         src: /media/Storage/{{ item }}
         dest: /etc/slurm/{{ item }}
         remote_src: yes
+        mode: '0644'
       with_items:
         - slurm.conf
         - cgroup.conf
@@ -284,9 +298,10 @@
         enabled: yes
         state: started
 
-    - name: Enable and start slurmctld service on controller
+    - name: Enable and start slurmctld service on p0
       systemd:
         name: slurmctld
         enabled: yes
         state: started
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
+
