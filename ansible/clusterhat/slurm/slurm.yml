@@ -27,52 +27,52 @@
         name: nfs-common
         state: present
 
-    - name: Install NFS server on controller
+    - name: Install NFS server on p0
       apt:
         name: nfs-kernel-server
         state: present
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Create NFS directory
       file:
-        path: /media/Storage
+        path: /clusterfs
         state: directory
         owner: nobody
         group: nogroup
         mode: '0777'
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Update /etc/exports
       lineinfile:
         path: /etc/exports
-        line: '/media/Storage 172.19.181.0/24(rw,sync,no_subtree_check)'
-      when: inventory_hostname == 'controller'
+        line: '/clusterfs 172.19.181.0/24(rw,sync,no_subtree_check)'
+      when: inventory_hostname == 'p0'
 
     - name: Restart NFS server
       systemd:
         name: nfs-kernel-server
         state: restarted
-      when: inventory_hostname == 'controller'
+      when: inventory_hostname == 'p0'
 
     - name: Create mount directory
       file:
-        path: /media/Storage
+        path: /clusterfs
         state: directory
         owner: nobody
         group: nogroup
         mode: '0777'
-      when: inventory_hostname != 'controller'
+      when: inventory_hostname != 'p0'
 
     - name: Add NFS mount to fstab
       lineinfile:
         path: /etc/fstab
-        line: '172.19.181.254:/media/Storage /media/Storage nfs defaults 0 0'
-      when: inventory_hostname != 'controller'
+        line: '172.19.181.254:/clusterfs /clusterfs nfs defaults 0 0'
+      when: inventory_hostname != 'p0'
 
     - name: Mount NFS share on nodes
       mount:
-        path: /media/Storage
-        src: '172.19.181.254:/media/Storage'
+        path: /clusterfs
+        src: '172.19.181.254:/clusterfs'
         fstype: nfs
         opts: defaults
         state: mounted
@@ -92,7 +92,7 @@
     - name: Copy Munge key to shared directory
       copy:
         src: /etc/munge/munge.key
-        dest: /media/Storage/munge.key
+        dest: /clusterfs/munge.key
         owner: munge
         group: munge
         mode: '0444'
@@ -101,7 +101,7 @@
 
     - name: Copy munge key from NFS to node
       copy:
-        src: /media/Storage/munge.key
+        src: /clusterfs/munge.key
         dest: /etc/munge/munge.key
         owner: munge
         group: munge
@@ -117,7 +117,7 @@
       failed_when: "'munge munge' not in result.stdout"
 
     # We are going to need to restart munge to pick up
-    # the new key on non-controllers
+    # the new key on non-p0s
     - name: Restart MUNGE service
       ansible.builtin.systemd:
         name: munge
@@ -251,7 +251,7 @@
           /dev/sda*
           /dev/cpu/*/*
           /dev/pts/*
-          /media/Storage*
+          /clusterfs*
         mode: '0644'
       when: inventory_hostname == 'p0'
 
@@ -273,7 +273,7 @@
     - name: Copy slurm configuration files to NFS
       copy:
         src: /etc/slurm/{{ item }}
-        dest: /media/Storage/{{ item }}
+        dest: /clusterfs/{{ item }}
         remote_src: no
         mode: '0644'
       with_items:
@@ -283,7 +283,7 @@
 
     - name: Copy slurm configuration files from NFS to nodes
       copy:
-        src: /media/Storage/{{ item }}
+        src: /clusterfs/{{ item }}
         dest: /etc/slurm/{{ item }}
         remote_src: yes
         mode: '0644'
