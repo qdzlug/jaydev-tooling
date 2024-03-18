@@ -10,7 +10,7 @@
 
     # Include our necessary variables
     - name: Include variables from vars.yaml
-      include_vars: vars.yaml
+      include_vars: default/vars.yaml
 
     # Reconfigure any packages
     # This fixes an issue from the way we build templates
@@ -72,4 +72,4 @@
     - role: cimon-io.asdf
   tasks:
     - name: Include variables from vars.yaml
-      include_vars: vars.yaml
+      include_vars: default/vars.yaml

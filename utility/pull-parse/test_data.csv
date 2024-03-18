@@ -1,0 +1,6 @@
+Unnamed: 0,User Name,User Primary Email,User Domain,Namespace,Repository,Content Type,Is Private (Yes / No),# Pulls (GET's),# Pushes (PUT's)
+1,User1,user1@example.com,example.com,namespace1,repo-base,Community,Yes,120000,28000
+2,User2,user2@example.com,example.com,namespace1,repo-web,Community,Yes,59000,0
+3,User3,user3@example.com,example.com,namespace2,repo-admin,Community,Yes,53000,0
+4,User4,user4@example.com,example.com,namespace1,repo-base,Community,Yes,52000,0
+5,User5,user5@example.com,example.com,namespace2,repo-test,Community,Yes,51000,0
