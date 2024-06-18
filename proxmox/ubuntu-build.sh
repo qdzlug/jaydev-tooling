@@ -20,7 +20,7 @@ usage() {
 }
 
 # Array of Ubuntu versions
-versions=("bionic" "jammy" "mantic" "lunar" "focal")
+versions=("bionic" "focal" "jammy" "mantic" "noble")
 
 # Base URL for Ubuntu cloud images
 base_url="https://cloud-images.ubuntu.com"
