@@ -1,0 +1,42 @@
+#cloud-config
+#
+groups:
+  - admingroup: [root,sys]
+  - cloud-users
+
+package_reboot_if_required: true
+package_update: true
+package_upgrade: true
+
+users:
+  - default
+  - name: jschmidt
+    gecos: Jay Schmidt
+    primary_group: jschmidt
+    groups: users
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_import_id:
+      - gh:qdzlug
+    lock_passwd: false
+    passwd: $6$j212wezy$7H/1LT4f9/N3wpgNunhsIqtMj62OKiS3nyNwuizouQc3u7MbYCarYeAHWYPYb2FT.lbioDm2RrkJPb9BZMN1O/ #oxide1234!
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh6ROxdnUrSAmjyqzlpvcSFlXcSwD7VMp7PvCTzAtDePSluBiQq3njWW88Pcxgmhsqhsm/ZjRKTdFO5RWRt2YM3BsZQqIMlsulIKK426RavgtnMYpJuUhTkyVm1QQAaoOH4NvkBOk35VOWylzxSZFa2v+LExjOQzQM5CfXB2GX7KerNNvEMNuTnFQ5upuV8YOEeeeomfLmt/I8VMxFJiSQWlELkS2NBVbhWKHcRaE2T2X2eASaruqlDhSMgeE0K/8bRuLquvv5j0F3rQ6slbVi0zjdIMRUlwD4gsZOQaSiFrQceItR+slp3/2FT/o6uxW/lJu3sW5RkHNHMxubSFpl jschmidt@jack.virington.com
+
+  - name: debian
+    gecos: Debian User
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    ssh_import_id:
+      - gh:qdzlug
+    lock_passwd: false
+    passwd: $6$j212wezy$7H/1LT4f9/N3wpgNunhsIqtMj62OKiS3nyNwuizouQc3u7MbYCarYeAHWYPYb2FT.lbioDm2RrkJPb9BZMN1O/ #oxide1234!
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh6ROxdnUrSAmjyqzlpvcSFlXcSwD7VMp7PvCTzAtDePSluBiQq3njWW88Pcxgmhsqhsm/ZjRKTdFO5RWRt2YM3BsZQqIMlsulIKK426RavgtnMYpJuUhTkyVm1QQAaoOH4NvkBOk35VOWylzxSZFa2v+LExjOQzQM5CfXB2GX7KerNNvEMNuTnFQ5upuV8YOEeeeomfLmt/I8VMxFJiSQWlELkS2NBVbhWKHcRaE2T2X2eASaruqlDhSMgeE0K/8bRuLquvv5j0F3rQ6slbVi0zjdIMRUlwD4gsZOQaSiFrQceItR+slp3/2FT/o6uxW/lJu3sW5RkHNHMxubSFpl jschmidt@jack.virington.com
+
+#cloud-config
+final_message: |
+  cloud-init has finished
+  version: $version
+  timestamp: $timestamp
+  datasource: $datasource
+  uptime: $uptime

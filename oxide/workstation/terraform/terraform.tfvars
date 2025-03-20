@@ -1,0 +1,12 @@
+instance_count    = 1
+instance_prefix   = "workstation"
+project_name      = "jay"
+boot_image_id     = "boot-image-id-here"
+public_ssh_key    = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFRtwMP9Vjdyv2SaVebA6NehbSr53Dc1sT8a/rVIoBRR"
+disk_size         = 137438953472
+memory            = 8589934592
+ncpus             = 4
+vpc_name          = "workstation-vpc"
+vpc_dns_name      = "workstation"
+vpc_description   = "Workstation VPC"
+username          = "jschmidt"
