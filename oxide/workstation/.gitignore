@@ -1,0 +1,53 @@
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ansible artifacts
+*.retry
+.ansible_cache/
+*.log
+
+# SSH keys and sensitive overrides (if templated or generated)
+*.pem
+*.key
+id_rsa*
+authorized_keys
+
+# Inventory cache (if dynamic)
+inventory/*.cache
+inventory/*~  # backup files
+
+# Secrets (if present)
+*.vault
+*.secrets.yml
+*.enc.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+terraform.tfvars
+
+# OS and Editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*~
+
+# VSCode
+.vscode/
+
+# IDEs
+.idea/
+*.iml
+
+# Archives
+*.tar.gz
+*.zip

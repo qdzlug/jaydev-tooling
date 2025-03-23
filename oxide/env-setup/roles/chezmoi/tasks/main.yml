@@ -1,0 +1,14 @@
+- name: Install chezmoi
+  shell: sh -c "$(curl -fsLS get.chezmoi.io)"
+  args:
+    creates: /usr/local/bin/chezmoi
+
+- name: Init chezmoi with dotfiles
+  become: no
+  shell: |
+    chezmoi init {{ chezmoi_source_repo }}
+    chezmoi apply
+  environment:
+    PATH: "{{ ansible_env.HOME }}/.local/bin:{{ ansible_env.PATH }}"
+  args:
+    chdir: "{{ ansible_env.HOME }}"

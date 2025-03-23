@@ -88,8 +88,8 @@ resource "oxide_instance" "workstation" {
 
 
 resource "local_file" "ansible_inventory" {
-  filename = "${path.root}/../ansible/inventory.ini"
-  content  = templatefile("${path.root}/templates/inventory.tpl", {
+  filename = "${path.root}/../ansible/inventory/inventory.ini"
+  content = templatefile("${path.root}/templates/inventory.tpl", {
     workstation_ips = [
       for key, instance in data.oxide_instance_external_ips.workstation :
       instance.external_ips[0].ip

@@ -1,0 +1,46 @@
+- name: Install Rust
+  shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  args:
+    creates: "{{ ansible_env.HOME }}/.cargo/bin/rustc"
+
+- name: Add Rust to PATH
+  shell: echo 'source $HOME/.cargo/env' >> ~/.zshrc
+  when: ansible_env.SHELL is search("zsh")
+
+- name: Install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+
+- name: Add Starship to shell config
+  lineinfile:
+    path: ~/.zshrc
+    line: 'eval "$(starship init zsh)"'
+    create: yes
+
+- name: Install Homebrew (Linux)
+  shell: |
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: install_homebrew
+
+- name: Install packages via brew
+  shell: |
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    brew install bat lsd
+  environment:
+    PATH: "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:{{ ansible_env.PATH }}"
+  when: install_homebrew
+
+- name: Install sshc.sh
+  shell: |
+    curl -s https://raw.githubusercontent.com/sickcodes/sshc/main/sshc.sh -o /usr/local/bin/sshc
+    chmod +x /usr/local/bin/sshc
+  args:
+    creates: /usr/local/bin/sshc
+
+- name: Install bin installer (marcosnils/bin)
+  shell: |
+    curl -fsSL https://raw.githubusercontent.com/marcosnils/bin/master/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.bin"
+  when: install_bin

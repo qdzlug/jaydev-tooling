@@ -1,0 +1,47 @@
+- name: Ensure required packages are installed
+  package:
+    name: qemu-utils
+    state: present
+  become: yes
+  when: ansible_os_family != "Darwin"
+
+- name: Download cloud image
+  get_url:
+    url: "{{ image_url }}"
+    dest: "/tmp/cloud-image"
+    mode: '0644'
+
+- name: Get image filename from URL
+  set_fact:
+    image_filename: "{{ image_url.split('/')[-1] }}"
+
+- name: Parse image metadata
+  set_fact:
+    image_os: >-
+      {{ 'ubuntu' if 'ubuntu' in image_filename else
+         'debian' if 'debian' in image_filename else
+         'rhel' if 'rhel' in image_filename or 'redhat' in image_filename else
+         'suse' if 'suse' in image_filename else 'unknown' }}
+    image_version: "{{ image_filename | regex_search('[0-9]+(\.[0-9]+)+', '\1') }}"
+    image_description: "Cloud image of {{ image_os }} {{ image_version }}"
+    image_name: "{{ image_os }}-{{ image_version | regex_replace('\.', '') }}"
+
+- name: Convert image to raw format
+  command: >
+    qemu-img convert -O raw /tmp/cloud-image /tmp/{{ image_name }}.raw
+  args:
+    creates: "/tmp/{{ image_name }}.raw"
+
+- name: Import image to Oxide
+  command: >
+    oxide disk import
+    --project {{ oxide_project }}
+    --path /tmp/{{ image_name }}.raw
+    --disk {{ image_name }}
+    --disk-block-size 512
+    --description "{{ image_description }}"
+    --snapshot {{ image_name }}
+    --image {{ image_name }}
+    --image-description "{{ image_description }}"
+    --image-os {{ image_os }}
+    --image-version {{ image_version }}

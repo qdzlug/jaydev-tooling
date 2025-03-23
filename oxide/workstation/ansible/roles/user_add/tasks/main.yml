@@ -1,0 +1,34 @@
+- name: Create user "{{ new_user }}"
+  user:
+    name: "{{ new_user }}"
+    shell: /bin/bash
+    groups: "{{ admin_group }}"
+    append: yes
+    state: present
+    create_home: yes
+
+- name: Set up .ssh directory for user
+  file:
+    path: "/home/{{ new_user }}/.ssh"
+    state: directory
+    owner: "{{ new_user }}"
+    group: "{{ new_user }}"
+    mode: 0700
+
+- name: Download GitHub public keys
+  get_url:
+    url: "https://github.com/{{ github_user }}.keys"
+    dest: "/tmp/{{ github_user }}.pub"
+  when: github_user is defined
+
+- name: Read downloaded keys
+  slurp:
+    src: "/tmp/{{ github_user }}.pub"
+  register: github_keys
+  when: github_user is defined
+
+- name: Add GitHub public keys to authorized_keys
+  authorized_key:
+    user: "{{ new_user }}"
+    key: "{{ github_keys.content | b64decode }}"
+  when: github_user is defined

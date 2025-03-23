@@ -1,0 +1,54 @@
+- name: Add Tailscale apt key (Debian/Ubuntu)
+  apt_key:
+    url: https://pkgs.tailscale.com/stable/ubuntu/focal.gpg
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Add Tailscale apt repository (Debian/Ubuntu)
+  apt_repository:
+    repo: "deb https://pkgs.tailscale.com/stable/ubuntu focal main"
+    state: present
+    filename: tailscale
+  when: ansible_os_family == "Debian"
+
+- name: Install Tailscale (Debian/Ubuntu)
+  apt:
+    name: tailscale
+    state: latest
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Add Tailscale yum repo (RHEL/CentOS)
+  yum_repository:
+    name: tailscale
+    description: Tailscale Stable Repo
+    baseurl: https://pkgs.tailscale.com/stable/rhel/$releasever/$basearch
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://pkgs.tailscale.com/stable/rhel/repodata/repomd.xml.key
+  when: ansible_os_family == "RedHat"
+
+- name: Install Tailscale (RHEL/CentOS)
+  yum:
+    name: tailscale
+    state: latest
+  when: ansible_os_family == "RedHat"
+
+- name: Add Tailscale zypper repo (SUSE)
+  zypper_repository:
+    name: tailscale
+    repo: https://pkgs.tailscale.com/stable/opensuse/tumbleweed
+    auto_import_keys: yes
+  when: ansible_os_family == "Suse"
+
+- name: Install Tailscale (SUSE)
+  zypper:
+    name: tailscale
+    state: present
+  when: ansible_os_family == "Suse"
+
+- name: Enable and start Tailscale service
+  systemd:
+    name: tailscaled
+    enabled: yes
+    state: started

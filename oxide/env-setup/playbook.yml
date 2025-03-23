@@ -1,0 +1,11 @@
+- name: Bootstrap Environment
+  hosts: all
+  become: yes
+  vars:
+    chezmoi_source_repo: "https://github.com/YOUR_GITHUB_USER/dotfiles.git"
+    install_homebrew: true
+    install_bin: true
+  roles:
+    - role: common
+    - role: tools
+    - role: chezmoi

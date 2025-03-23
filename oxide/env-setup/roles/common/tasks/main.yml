@@ -1,0 +1,31 @@
+- name: Install base packages
+  package:
+    name:
+      - tmux
+      - zsh
+      - neovim
+      - curl
+      - wget
+      - git
+      - sudo
+    state: present
+  when: ansible_os_family in ['Debian', 'RedHat', 'Suse']
+
+- name: Install build tools (Debian/Ubuntu)
+  apt:
+    name: build-essential
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install build tools (RHEL)
+  yum:
+    name:
+      - @development-tools
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install build tools (SUSE)
+  zypper:
+    name: -t pattern devel_basis
+    state: present
+  when: ansible_os_family == "Suse"

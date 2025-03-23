@@ -1,0 +1,8 @@
+- name: Import Cloud Image into Oxide
+  hosts: localhost
+  gather_facts: no
+  vars:
+    image_url: ""
+    oxide_project: "omni"
+  roles:
+    - oxide_image

@@ -1,0 +1,53 @@
+- name: Create local bin directory for user
+  become: true
+  become_user: "{{ new_user }}"
+  file:
+    path: "/home/{{ new_user }}/.local/bin"
+    state: directory
+
+- name: Download chezmoi binary
+  become: true
+  become_user: "{{ new_user }}"
+  get_url:
+    url: https://github.com/twpayne/chezmoi/releases/latest/download/chezmoi-linux-amd64
+    dest: /home/{{ new_user }}/.local/bin/chezmoi
+    mode: '0755'
+
+- name: Check if chezmoi binary is installed
+  stat:
+    path: "/home/{{ new_user }}/.local/bin/chezmoi"
+  register: chezmoi_stat
+
+- name: Debug chezmoi path
+  debug:
+    msg: "Chezmoi is installed: {{ chezmoi_stat.stat.exists }}"
+
+- set_fact:
+    chezmoi_repo_url: "https://{{ github_user }}:{{ vault_github_token }}@github.com/{{ github_user }}/dotty.git"
+
+- name: Debug token (masked)
+  debug:
+    msg: "Token starts with: {{ vault_github_token[:4] }}..."
+
+- name: Initialize chezmoi with token-authenticated URL
+  become: true
+  become_user: "{{ new_user }}"
+  shell: >
+    /home/{{ new_user }}/.local/bin/chezmoi init {{ chezmoi_repo_url }} &&
+    /home/{{ new_user }}/.local/bin/chezmoi apply
+  environment:
+    HOME: "/home/{{ new_user }}"
+    USER: "{{ new_user }}"
+    PATH: "/home/{{ new_user }}/.local/bin:/usr/local/bin:/usr/bin:/bin"
+  args:
+    executable: /bin/bash
+    chdir: "/home/{{ new_user }}"
+  register: chezmoi_result
+
+- name: Debug chezmoi stdout
+  debug:
+    var: chezmoi_result.stdout_lines
+
+- name: Debug chezmoi stderr
+  debug:
+    var: chezmoi_result.stderr_lines

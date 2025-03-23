@@ -1,0 +1,71 @@
+- name: Install Rust
+  shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  args:
+    creates: "{{ ansible_env.HOME }}/.cargo/bin/rustc"
+  when: install_rust
+
+- name: Add Rust to PATH
+  shell: echo 'source $HOME/.cargo/env' >> ~/.zshrc
+  when: ansible_env.SHELL is search("zsh")
+  when: install_rust
+
+- name: Install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+  when: install_starship
+
+- name: Add Starship to shell config
+  lineinfile:
+    path: ~/.zshrc
+    line: 'eval "$(starship init zsh)"'
+    create: yes
+
+- name: Install Homebrew (Linux for single user)
+  become: true
+  become_user: "{{ new_user }}"
+  environment:
+    NONINTERACTIVE: "1"
+    CI: "1"
+    HOMEBREW_PREFIX: "/home/{{ new_user }}/.linuxbrew"
+  shell: |
+    mkdir -p "$HOMEBREW_PREFIX" && \
+    git clone https://github.com/Homebrew/brew "$HOMEBREW_PREFIX/Homebrew" && \
+    mkdir -p "$HOMEBREW_PREFIX/bin" && \
+    ln -s ../Homebrew/bin/brew "$HOMEBREW_PREFIX/bin/brew"
+  args:
+    creates: "/home/{{ new_user }}/.linuxbrew/bin/brew"
+  when: install_homebrew
+
+- name: Add Homebrew to shell environment
+  become: true
+  become_user: "{{ new_user }}"
+  lineinfile:
+    path: "/home/{{ new_user }}/.zshrc"
+    line: 'eval "$(/home/{{ new_user }}/.linuxbrew/bin/brew shellenv)"'
+    create: yes
+  when: install_homebrew
+
+- name: Install packages via brew
+  become: true
+  become_user: "{{ new_user }}"
+  shell: |
+    eval "$(/home/{{ new_user }}/.linuxbrew/bin/brew shellenv)"
+    brew install bat lsd
+  environment:
+    PATH: "/home/{{ new_user }}/.linuxbrew/bin:/home/{{ new_user }}/.linuxbrew/sbin:{{ ansible_env.PATH }}"
+  when: install_homebrew
+
+- name: Install sshc.sh
+  shell: |
+    curl -s https://raw.githubusercontent.com/sickcodes/sshc/main/sshc.sh -o /usr/local/bin/sshc
+    chmod +x /usr/local/bin/sshc
+  args:
+    creates: /usr/local/bin/sshc
+
+- name: Install bin installer (marcosnils/bin)
+  shell: |
+    curl -fsSL https://raw.githubusercontent.com/marcosnils/bin/master/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.bin"
+  when: install_bin
