@@ -33,8 +33,8 @@
   become: true
   become_user: "{{ new_user }}"
   shell: >
-    /home/{{ new_user }}/.local/bin/chezmoi init {{ chezmoi_repo_url }} &&
-    /home/{{ new_user }}/.local/bin/chezmoi apply
+    /home/{{ new_user }}/.local/bin/chezmoi init {{ chezmoi_repo_url }} --force &&
+    /home/{{ new_user }}/.local/bin/chezmoi apply --force
   environment:
     HOME: "/home/{{ new_user }}"
     USER: "{{ new_user }}"

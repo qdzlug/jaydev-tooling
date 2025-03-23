@@ -32,3 +32,12 @@
     user: "{{ new_user }}"
     key: "{{ github_keys.content | b64decode }}"
   when: github_user is defined
+
+- name: Ensure passwordless sudo for new_user
+  copy:
+    dest: "/etc/sudoers.d/{{ new_user }}"
+    content: "{{ new_user }} ALL=(ALL) NOPASSWD:ALL\n"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -cf %s'
