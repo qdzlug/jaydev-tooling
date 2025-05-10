@@ -1,0 +1,12 @@
+#/bin/bash
+
+PORT=$1
+
+if [ $# -ne 1 ]; 
+    then echo "Need to specify a port!"
+    exit
+fi
+
+echo "Connecting to Demo1 CN, Port to use is $PORT"
+
+ssh -o TCPKeepAlive=yes -N -n demo1 -L $PORT:192.168.216.6:$PORT

@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+# Simple shell script to create a put Manta URL, sign it, build 
+# the curl command, and copy it to your clipboard.
+#
+# If you are not using this on a mac, you will want to adjust
+# the pbcopy command; next rev will have logic to detect the 
+# OS and adjust accordingly
+# 
+# Courtesy of PG Tools, Ltd....
+#
+
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 MANTA_PATH [EXPIRE_TIME] [L|C]"
+    echo "Example: $0 /testuser/store/somefile 4H"	
+    echo "Expire Time Defaults to 4 Hours"
+    echo ""
+    echo "Adding 'L' after an expire time will print the link to stdout"
+    echo "Adding 'C' after an expire time will print the curl to stdout"
+    exit 1
+fi
+
+FILE=$1
+
+if [ -z "$2" ] ; then
+	EXPIRE=4H
+	LINK=P # standard
+else
+	EXPIRE=$2
+	# Need to give expire with either L or C
+	if [ "$3" = "L" ] ; then
+		LINK=L
+	elif [ "$3" = "C" ] ; then
+		LINK=C
+	else
+		LINK=P
+	fi
+fi
+
+RFILE=`basename $1`
+
+EXPD=`date -v+$EXPIRE "+%s"`
+URL=`msign -m PUT -e $EXPD "$FILE"`
+
+if [ "$LINK" = "P" ] ; then
+	echo "curl -k '$URL' -T $RFILE" | pbcopy
+	echo "Copied Command Assumes send file is in current directory on remote host; if not, adjust"
+elif [ "$LINK" = "C" ] ; then
+	echo "curl -k '$URL' -T $RFILE" 
+	echo "Above Command Assumes send file is in current directory on remote host; if not, adjust"
+elif [ "$LINK" = "L" ] ; then
+	echo "'$URL'"
+else
+ 	echo "Bad option!"
+	exit 1
+fi
+
+

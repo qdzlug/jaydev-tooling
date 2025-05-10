@@ -1,0 +1,2 @@
+sudo cp /etc/resolv.conf /etc/resolv.hold
+sudo cp ./resolv.good /etc/resolv.conf

@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Stow my files!
+#
+
+stow -d ~/dotfiles -t ~/ -S ansible antigen atom bash bin geeknote gist git iterm2 jay sdc tmux vim zsh triton
+#stow -d ~/dotfiles -t ~/support -S support

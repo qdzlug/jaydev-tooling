@@ -1,0 +1,1 @@
+openssl s_client -connect $SERVER:$PORT -servername $SERVER |openssl x509 -noout  -dates

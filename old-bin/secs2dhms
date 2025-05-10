@@ -1,0 +1,123 @@
+#!/bin/ksh
+# Listing 3: secs2dhms
+# This script accepts a number of seconds argument and returns a string 
+# in hours, minutes and seconds with corresponding labels.  For example,
+# executing:
+#
+# secs2dhms 94550
+#
+# returns:
+#
+# 1 day 2 hours 15 minutes 50 seconds
+
+TRUE=0
+FALSE=1
+
+integer SECONDS_IN_DAY=86400
+integer SECONDS_IN_HOUR=3600
+integer SECONDS_IN_MINUTE=60
+
+readonly SECONDS_IN_DAY SECONDS_IN_HOUR SECONDS_IN_MINUTE
+
+integer days=0
+integer hours=0
+integer minutes=0
+integer seconds=0
+
+need_space=$FALSE
+
+# This function returns true if $1 is an integer. otherwise, returns false
+is_integer()
+{
+# echo the argument to eliminate white space.
+	case $(echo $1) in
+		+([-+0-9])) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+echo_s()
+{
+	if (( $1 != 1 ))
+	then
+		echo "s\c"
+	fi
+}
+
+if [[ -z $1 ]]
+then
+	read operand
+else
+	operand=$1
+fi
+
+if is_integer $operand
+then
+	seconds=$operand
+else
+	echo "$operand is not an integer!"
+	return 1
+fi
+
+if (( $seconds < 0 ))
+then
+	seconds=$(($seconds * -1))
+	sign="-"
+else
+	sign=""
+fi
+	
+if (( "$seconds" >= $SECONDS_IN_DAY ))
+then
+	days=$(( $seconds / $SECONDS_IN_DAY ))
+	seconds=$(( $seconds % $SECONDS_IN_DAY ))
+fi
+
+if (( "$seconds" >= $SECONDS_IN_HOUR ))
+then
+	hours=$(( $seconds / $SECONDS_IN_HOUR ))
+	seconds=$(( $seconds % $SECONDS_IN_HOUR ))
+fi
+
+if (( "$seconds" >= $SECONDS_IN_MINUTE ))
+then
+	minutes=$(( $seconds / $SECONDS_IN_MINUTE ))
+	seconds=$(( $seconds % $SECONDS_IN_MINUTE ))
+fi
+
+[[ -n "$sign" ]] && echo "$sign\c"
+
+if (($days > 0)) || (($hours > 0)) || (($minutes > 0)) || (($seconds > 0))
+then
+	if (($days > 0))
+	then
+		echo "$days day\c"
+		echo_s $days
+		need_space=$TRUE
+	fi
+	if (($hours > 0))
+	then
+		[[ $need_space -eq $TRUE ]] && echo " \c"
+		echo "$hours hour\c"
+		echo_s $hours
+		need_space=$TRUE
+	fi
+	if (($minutes > 0))
+	then
+		[[ $need_space -eq $TRUE ]] && echo " \c"
+		echo "$minutes minute\c"
+		echo_s $minutes
+		need_space=$TRUE
+	fi
+	if (($seconds > 0))
+	then
+		[[ $need_space -eq $TRUE ]] && echo " \c"
+		echo "$seconds second\c"
+		echo_s $seconds
+	fi
+else
+	echo "0 seconds\c"
+fi
+
+# Echo a newline
+echo "\n"

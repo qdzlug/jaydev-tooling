@@ -1,0 +1,14 @@
+#!/bin/sh
+tmux -f ~/.tmux.conf new-session  -d -s swsand
+
+tmux new-window -t swsand:1 -n 'd1-head' '/usr/pkg/bin/ipmitool -I lanplus -U root -P calvin  -H 192.168.214.7 sol activate'
+tmux new-window -t swsand:2 -n 'd1-comp' '/usr/pkg/bin/ipmitool -I lanplus -U ADMIN -P ADMIN  -H 192.168.214.8 sol activate'
+tmux new-window -t swsand:3 -n 'd4-head' '/usr/pkg/bin/ipmitool -I lanplus -U root -P calvin  -H 192.168.214.199 sol activate'
+tmux new-window -t swsand:4 -n 'd4-comp' '/usr/pkg/bin/ipmitool -I lanplus -U ADMIN -P ADMIN  -H 192.168.214.200 sol activate'
+tmux new-window -t swsand:5 -n 'd1-ssh' 'ssh demo1'
+tmux new-window -t swsand:6 -n 'd1-ssh' 'ssh demo1'
+tmux new-window -t swsand:7 -n 'd4-ssh' 'ssh demo4'
+tmux new-window -t swsand:8 -n 'd4-ssh' 'ssh demo4'
+
+tmux select-window -t demo-1-hn:1
+tmux -2 attach-session -t swsand

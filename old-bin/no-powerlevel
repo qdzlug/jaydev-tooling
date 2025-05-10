@@ -1,0 +1,14 @@
+# Get rid of powerlevel for now....
+prompt_powerlevel9k_teardown
+source ~/antigen/antigen.zsh
+antigen use oh-my-zsh
+antigen bundle git
+antigen bundle heroku
+antigen bundle pip
+antigen bundle lein
+antigen bundle command-not-found
+antigen bundle zsh-users/zsh-syntax-highlighting
+#antigen theme robbyrussell
+antigen theme agnoster
+# Tell antigen that you're done.
+antigen apply

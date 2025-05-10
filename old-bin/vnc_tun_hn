@@ -1,0 +1,12 @@
+#/bin/bash
+
+PORT=$1
+
+if [ $# -ne 1 ]; 
+    then echo "Need to specify a port!"
+    exit
+fi
+
+echo "Connecting to CAK Headnode, Port to use is $PORT"
+
+ssh -o TCPKeepAlive=yes -N -n root@headnode.virington.com -L $PORT:10.1.1.7:$PORT
