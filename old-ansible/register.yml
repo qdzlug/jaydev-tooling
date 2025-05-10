@@ -1,0 +1,21 @@
+- hosts: all
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: Make sure we have a 'register' group
+    group:
+      name: register
+      state: present
+
+  - name: Add the user 'register' with a specific uid and a primary group of 'register'
+    user:
+      name: register
+      comment: User
+      group: register
+
+  - name: sudo without password for register group
+    copy:
+      content: '%register ALL=(ALL:ALL) NOPASSWD:ALL'
+      dest: /etc/sudoers.d/register_nopasswd
+      mode: 0440 
+

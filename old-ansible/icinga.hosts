@@ -1,0 +1,10 @@
+[stack:vars]
+ansible_user=icinga 
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_become_pass=icinga
+ansible_python_interpreter=/usr/bin/python3
+
+[stack]
+icinga.virington.com
+

@@ -1,0 +1,10 @@
+[stack:vars]
+ansible_user=splunk 
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_become_pass=splunk
+ansible_python_interpreter=/usr/bin/python3
+
+[stack]
+splunkster.virington.com
+

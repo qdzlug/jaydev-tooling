@@ -1,0 +1,68 @@
+#################################################
+# DO Community Playbook
+#################################################
+---
+- hosts: all
+  remote_user: root
+  gather_facts: false
+
+  tasks:
+    - name: Install Python
+      raw: apt -y update && apt install -y python
+    
+    - name: Install Python3
+      raw: apt -y update && apt install -y python3
+  
+    - name: Python Setuptools
+      raw: apt install -y  python-setuptools
+  
+    - name: Python Pip
+      raw: apt install -y  python-pip
+  
+    - name: Aptitude
+      raw: apt install -y  aptitude
+  
+    - name: Guest Agent
+      raw: apt install -y  qemu-guest-agent
+
+    - name: Enable guest agent
+      service:
+         name: qemu-guest-agent
+         enabled: yes
+         state: started
+
+    - name: Install new packages
+      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'lsb-release', 'magic-wormhole', 'qemu-guest-agent' ]
+
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+
+    - name: Make sure we have a 'wheel' group
+      group:
+        name: wheel
+        state: present
+
+    - name: Add the user 'stack' with a specific uid and a primary group of 'stack'
+      user:
+        name: stack
+        comment: Openstack User
+        group: stack
+
+    - name: sudo without password for stack group
+      copy:
+        content: '%stack ALL=(ALL:ALL) NOPASSWD:ALL'
+        dest: /etc/sudoers.d/stack_nopasswd
+        mode: 0440 
+
+    - git:
+        repo: 'https://github.com/openstack-dev/devstack.git'
+        dest: /home/stack/devstack
+        version: stable/train

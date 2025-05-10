@@ -1,0 +1,10 @@
+[stack:vars]
+ansible_user=register 
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_become_pass=register
+ansible_python_interpreter=/usr/bin/python3
+
+[stack]
+register.virington.com
+

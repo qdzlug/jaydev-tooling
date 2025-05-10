@@ -1,0 +1,10 @@
+[splunk:vars]
+ansible_user=jschmidt
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_become_pass=PeanutTime2019!
+
+[splunk]
+timmy.virington.com
+wanda.virington.com
+

@@ -1,0 +1,10 @@
+[stack:vars]
+ansible_user=stack 
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_become_pass=stack
+
+[stack]
+stack01.virington.com
+stack02.virington.com
+

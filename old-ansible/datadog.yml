@@ -1,0 +1,8 @@
+- hosts: all
+  roles:
+    - { role: datadog.datadog, become: yes }
+  vars:
+    datadog_api_key: "897dbb140c7898b0dc1c74ec0ded8f17"
+    notify_no_data: yes
+    notify_audit: yes
+

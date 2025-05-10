@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Install the docker module for python
+      pip:
+        name: docker
+        executable: pip3
+
+    - name: Pull the latest portainer agent
+      docker_image: 
+        source: pull
+        name: portainer/agent
+        tag: latest
+
+    - name: Run or restart the portainer agent
+      docker_container:
+        name: portainer_agent
+        image: portainer/agent:latest
+        state: started
+        restart: yes
+        recreate: yes
+        restart_policy: always
+        published_ports:
+          - 9001:9001
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /var/lib/docker/volumes:/var/lib/docker/volumes

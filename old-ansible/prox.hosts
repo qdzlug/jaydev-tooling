@@ -1,0 +1,5 @@
+[proxmox]
+prox01.virington.com ansible_user=root
+prox02.virington.com ansible_user=root
+prox03.virington.com ansible_user=root
+prox04.virington.com ansible_user=root

@@ -1,0 +1,93 @@
+- hosts: all
+  remote_user: ubuntu
+  gather_facts: true
+  become_method: sudo
+  become: true
+  tasks:
+
+  - name: Update and upgrade apt packages
+    become: true
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+
+  - name: Make sure we have a 'jschmidt' group
+    group:
+      name: jschmidt
+      state: present
+
+  - name: Add the user 'jschmidt' with a specific uid and a primary group of 'jschmidt'
+    user:
+      name: jschmidt
+      comment: User
+      group: jschmidt
+      shell: /usr/bin/zsh
+
+  - name: sudo without password for jschmidt group
+    copy:
+      content: '%jschmidt ALL=(ALL:ALL) NOPASSWD:ALL'
+      dest: /etc/sudoers.d/jschmidt
+      mode: 0440
+
+  - name: Set authorized keys taken from url
+    ansible.posix.authorized_key:
+      user: jschmidt
+      state: present
+      key: https://github.com/qdzlug.keys
+
+  - name: Install required system packages
+    apt: name={{ item }} state=latest update_cache=yes
+    loop: [ 'build-essential ', 'curl ', 'jq', 'libbz2-dev ', 'libffi-dev ', 'liblzma-dev ', 'libncursesw5-dev ', 'libreadline-dev ', 'libsqlite3-dev ', 'libssl-dev ', 'libxml2-dev ', 'libxmlsec1-dev ', 'llvm ', 'make ', 'tk-dev ', 'wget ', 'xz-utils ', 'zlib1g-dev', 'unzip' ]
+
+  - name: Install aptitude using apt
+    apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu focal stable
+      state: present
+
+  - name: Update apt and install docker-ce
+    apt: update_cache=yes name=docker-ce state=latest
+
+  - name: Update apt and install docker-compose
+    apt: update_cache=yes name=docker-compose state=latest
+
+  - name: Install Docker Module for Python
+    pip:
+      name: docker
+      executable: pip3
+
+  - name: Add jschmidt to docker group
+    user:
+      name: jschmidt
+      groups: docker
+      append: yes
+
+- hosts: all
+  remote_user: jschmidt
+  gather_facts: true
+  become: false
+  roles: 
+    - role: markosamuli.asdf
+  tasks:
+    - name: update asdf
+      ansible.builtin.shell: PATH=$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH ASDF_DIR=$HOME/.asdf asdf update
+    - name: add chezmoi
+      ansible.builtin.shell: PATH=$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH ASDF_DIR=$HOME/.asdf asdf plugin add chezmoi
+    - name: add zoxide
+      ansible.builtin.shell: PATH=$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH ASDF_DIR=$HOME/.asdf asdf plugin add zoxide
+    - name: install chezmoi
+      ansible.builtin.shell: PATH=$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH ASDF_DIR=$HOME/.asdf asdf install chezmoi latest
+    - name: install zoxide
+      ansible.builtin.shell: PATH=$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH ASDF_DIR=$HOME/.asdf asdf install zoxide latest
+    - name: chezmoi version
+      ansible.builtin.shell: PATH=$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH ASDF_DIR=$HOME/.asdf asdf global chezmoi latest
+    - name: zoxide version
+      ansible.builtin.shell: PATH=$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH ASDF_DIR=$HOME/.asdf asdf global zoxide latest
