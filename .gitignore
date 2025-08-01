@@ -1,18 +1,84 @@
-/terraform/vmbuild/terraform.tfstate
-/terraform/vmbuild/terraform.tfstate.backup
-/terraform/vmbuild/.terraform.lock.hcl
-/terraform/vmbuild/variables.tfvars
-/terraform/vmbuild/.terraform/
-/ansible/asdf-devbox/default/vars.yaml
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
 
-terraform/ctbuild/.terraform.lock.hcl
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata/
+.env
+.venv
+venv/
+env/
+*.log
 
-terraform/vmbuild/.terraform.tfstate.lock.info
+# Virtualenv/Poetry
+.poetry/
+.pytest_cache/
+.tox/
+.coverage
+.mypy_cache/
+.dmypy.json
+.cache/
+*.sqlite3
 
-terraform/ctbuild/terraform.tfstate.backup
+# Packer
+packer_cache/
+*.pkr.hcl.lock
+*.pkrvars.hcl
+*.pkrlog
 
-terraform/ctbuild/terraform.tfstate
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+crash.log
+override.tf
+override.tf.json
+*.backup
+.terraform.lock.hcl
 
-terraform/ctbuild/variables.tfvars
+# Ansible
+*.retry
+inventory.ini
+secrets.yml
+vault_pass.txt
+*.orig
+*.bak
+host_vars/
+group_vars/
+ansible.cfg
 
-terraform/ctbuild/.terraform/providers/
+# Nomad
+*.nomad.deployment
+.nomad/jobs/
+.nomad/logs/
+.nomad/plugins/
+
+# System
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+Thumbs.db
+ehthumbs.db
+
+# VS Code
+.vscode/
+
+# JetBrains IDEs (PyCharm, IntelliJ, etc.)
+.idea/
+
+# OS-generated files
+desktop.ini
