@@ -1,0 +1,7 @@
+[cluster]
+p0 ansible_host=172.19.181.254
+p1 ansible_host=172.19.181.1
+p2 ansible_host=172.19.181.2
+p3 ansible_host=172.19.181.3
+p4 ansible_host=172.19.181.4
+

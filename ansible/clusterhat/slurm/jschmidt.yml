@@ -1,0 +1,29 @@
+---
+- hosts: cluster
+  become: yes
+  tasks:
+  - name: Create user and group 'jschmidt'
+    ansible.builtin.user:
+      name: jschmidt
+      group: jschmidt
+      create_home: yes
+      shell: /bin/bash
+    when: inventory_hostname != 'controller'
+  
+  - name: Create .ssh directory for jschmidt
+    ansible.builtin.file:
+      path: /home/jschmidt/.ssh
+      state: directory
+      owner: jschmidt
+      group: jschmidt
+      mode: '0700'
+    when: inventory_hostname != 'controller'
+  
+  - name: Get SSH keys from GitHub
+    ansible.builtin.get_url:
+      url: https://github.com/qdzlug.keys
+      dest: /home/jschmidt/.ssh/authorized_keys
+      owner: jschmidt
+      group: jschmidt
+      mode: '0600'
+    when: inventory_hostname != 'controller'

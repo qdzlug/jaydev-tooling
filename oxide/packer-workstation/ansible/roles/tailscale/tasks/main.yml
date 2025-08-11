@@ -52,8 +52,3 @@
     name: tailscaled
     enabled: yes
     state: started
-
-- name: Authenticate with Tailscale using auth key
-  become: true
-  command: tailscale up --authkey={{ tailscale_authkey }}
-  when: tailscale_authkey is defined

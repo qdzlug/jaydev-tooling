@@ -1,0 +1,10 @@
+pm_api_url      = "https://192.168.212.101:8006/api2/json"
+pm_user         = "root@pam"
+pm_password     = "DrummerBoy1997"
+pm_tls_insecure = "true"
+node            = ["prox01", "prox02", "prox03", "prox04", "prox05", "prox06"]
+vm_count        = 6
+template        = "lunar-template"
+ssh_keys        = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh6ROxdnUrSAmjyqzlpvcSFlXcSwD7VMp7PvCTzAtDePSluBiQq3njWW88Pcxgmhsqhsm/ZjRKTdFO5RWRt2YM3BsZQqIMlsulIKK426RavgtnMYpJuUhTkyVm1QQAaoOH4NvkBOk35VOWylzxSZFa2v+LExjOQzQM5CfXB2GX7KerNNvEMNuTnFQ5upuV8YOEeeeomfLmt/I8VMxFJiSQWlELkS2NBVbhWKHcRaE2T2X2eASaruqlDhSMgeE0K/8bRuLquvv5j0F3rQ6slbVi0zjdIMRUlwD4gsZOQaSiFrQceItR+slp3/2FT/o6uxW/lJu3sW5RkHNHMxubSFpl jschmidt@jack.virington.com"
+name_prefix     = "slurm"
+storage         = "ceph01"

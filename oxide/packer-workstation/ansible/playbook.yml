@@ -1,0 +1,21 @@
+- name: Bootstrap environment, create user, install tools, install dotfiles, and install Tailscale
+  hosts: all
+  become: yes
+  vars_files:
+    - vars.yml
+
+  pre_tasks:
+    - name: Set admin group based on OS
+      set_fact:
+        admin_group: >-
+          {{ 'sudo' if ansible_os_family == 'Debian' else
+             'wheel' if ansible_os_family == 'RedHat' else
+             'users' if ansible_os_family == 'Suse' else 'sudo' }}
+
+  roles:
+    - role: user_add
+    - role: common
+    - role: tools
+    - { role: chezmoi, new_user: jschmidt, github_user: qdzlug, github_token: "{{ vault_github_token }}" }
+    - role: tailscale
+    - role: finalize # this role completes the setup

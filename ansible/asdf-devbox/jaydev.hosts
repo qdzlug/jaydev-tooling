@@ -1,0 +1,5 @@
+[jaydev:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[jaydev]
+192.168.213.79  ansible_user=jschmidt

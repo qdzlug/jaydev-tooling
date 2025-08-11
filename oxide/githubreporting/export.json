@@ -1,0 +1,691 @@
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Want support for instance resizing",
+  "id": 19,
+  "labels": [
+    "customer:inl",
+    "sev:3-med/low",
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "6 - Done",
+  "anduril_priority": "",
+  "on_roadmap": ""
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Need ability to replace a sled",
+  "id": 66,
+  "labels": [
+    "customer:inl",
+    "customer:janest",
+    "type:enhancement",
+    "sev:3-med/low",
+    "customer:shopify",
+    "customer:llnl",
+    "customer:iqt",
+    "customer:switch",
+    "customer:jump",
+    "customer:anduril"
+  ],
+  "status": "4 - In progress",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Network flow logs and related metrics (ex VPC firewall rules & routes)",
+  "id": 99,
+  "labels": [
+    "customer:inl",
+    "customer:janest",
+    "type:wishlist",
+    "networking",
+    "customer:anduril"
+  ],
+  "status": "4 - In progress",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Audit log of user activities",
+  "id": 100,
+  "labels": [
+    "customer:inl",
+    "customer:janest",
+    "type:wishlist",
+    "customer:shopify",
+    "networking",
+    "customer:llnl",
+    "customer:iqt",
+    "customer:switch",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "4 - In progress",
+  "anduril_priority": "0 - Vital",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "[Internal] Let's Encrypt Integration",
+  "id": 112,
+  "labels": [
+    "type:wishlist",
+    "customer:shopify",
+    "prodsec",
+    "customer:jump",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Request for direct connection (no NAT) for instances ",
+  "id": 132,
+  "labels": [
+    "customer:janest",
+    "type:enhancement",
+    "sev:3-med/low",
+    "networking",
+    "customer:switch",
+    "customer:anduril"
+  ],
+  "status": "3 - Todo",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "[Internal] Configuration state for IdP resources",
+  "id": 152,
+  "labels": [
+    "type:wishlist",
+    "customer:shopify",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Improve Support Management of Rack ",
+  "id": 166,
+  "labels": [
+    "customer:inl",
+    "customer:janest",
+    "sev:2-high",
+    "type:wishlist",
+    "customer:shopify",
+    "customer:llnl",
+    "customer:iqt",
+    "customer:switch",
+    "customer:jump",
+    "customer:anduril"
+  ],
+  "status": "4 - In progress",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Oxide Load Balancer",
+  "id": 203,
+  "labels": [
+    "type:enhancement",
+    "sev:3-med/low",
+    "customer:shopify",
+    "networking",
+    "customer:switch",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Support for upstream network segmentation ",
+  "id": 220,
+  "labels": [
+    "customer:inl",
+    "type:wishlist",
+    "networking",
+    "customer:anduril"
+  ],
+  "status": "3 - Todo",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Allow new silo to inherit system TLS certificate during creation",
+  "id": 227,
+  "labels": [
+    "type:enhancement",
+    "type:wishlist",
+    "customer:llnl",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Multirack support",
+  "id": 238,
+  "labels": [
+    "customer:inl",
+    "customer:janest",
+    "type:wishlist",
+    "customer:shopify",
+    "customer:llnl",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "API Token Management",
+  "id": 250,
+  "labels": [
+    "type:wishlist",
+    "customer:llnl",
+    "customer:iqt",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "4 - In progress",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Multicast support",
+  "id": 310,
+  "labels": [
+    "customer:janest",
+    "type:wishlist",
+    "networking",
+    "customer:iqt",
+    "customer:anduril"
+  ],
+  "status": "4 - In progress",
+  "anduril_priority": "3 - Low",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Anduril: onboarding survey",
+  "id": 329,
+  "labels": [
+    "type:survey",
+    "sev:4-none",
+    "customer:anduril"
+  ],
+  "status": "6 - Done",
+  "anduril_priority": "",
+  "on_roadmap": ""
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Anduril: API endpoint / web UI welcome page",
+  "id": 404,
+  "labels": [
+    "type:wishlist",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Apply access policy to group prior to group JIT provisioning [SCIM support?] ",
+  "id": 408,
+  "labels": [
+    "type:enhancement",
+    "sev:1-critical",
+    "customer:shopify",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "0 - Vital",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Anduril: Usage metrics by silo, project, etc.",
+  "id": 409,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "3 - Low",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Improve flow of linking IP pools to silos and marking them default",
+  "id": 413,
+  "labels": [
+    "type:enhancement",
+    "sev:3-med/low",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "More granular RBAC around networking",
+  "id": 416,
+  "labels": [
+    "type:wishlist",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "0 - Vital",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Request for Bypassing NAT",
+  "id": 417,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Ability to Audit if VM has \"escaped\" VPC",
+  "id": 418,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Customer Seeks Different Form Factors",
+  "id": 420,
+  "labels": [
+    "type:wishlist",
+    "customer:iqt",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Country of Origin Restrictions For Transcievers",
+  "id": 421,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Want ability to provide PEM formatted cert/key for CLI, GUI, API",
+  "id": 422,
+  "labels": [
+    "type:enhancement",
+    "sev:3-med/low",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Use SAML Metadata to parse out entity_id and other information",
+  "id": 423,
+  "labels": [
+    "type:enhancement",
+    "sev:4-none",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Want ability to see choices made during silo provision time when setting up idp",
+  "id": 424,
+  "labels": [
+    "type:enhancement",
+    "sev:4-none",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Want ability to use terraform for silo / idp configuration",
+  "id": 425,
+  "labels": [
+    "type:enhancement",
+    "sev:3-med/low",
+    "customer:switch",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Frontend for collaborators/viewers to only see what they have access to",
+  "id": 426,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Custom VM Sizes for Portal",
+  "id": 427,
+  "labels": [
+    "type:enhancement",
+    "sev:3-med/low",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "List of all parameters that can be changed while instance is running",
+  "id": 428,
+  "labels": [
+    "type:question",
+    "sev:3-med/low",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n/a"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Anduril: Rack update to r15 (20-June-2025 - Confirmed)",
+  "id": 441,
+  "labels": [
+    "type:maintenance",
+    "customer_rack_access",
+    "customer:anduril"
+  ],
+  "status": "6 - Done",
+  "anduril_priority": "2 - Normal",
+  "on_roadmap": ""
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Anduril: Request for TAA compliance",
+  "id": 442,
+  "labels": [
+    "type:question",
+    "sev:3-med/low",
+    "type:task",
+    "customer:anduril"
+  ],
+  "status": "3 - Todo",
+  "anduril_priority": "",
+  "on_roadmap": "n/a"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "50x errors returned during disk deletion",
+  "id": 443,
+  "labels": [
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Anduril: Validation Tests - Parent Issue",
+  "id": 444,
+  "labels": [
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "0 - Vital",
+  "on_roadmap": "n/a"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Clickhouse (Timeseries) Validations",
+  "id": 445,
+  "labels": [
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Terraform VM provisioning at scale",
+  "id": 446,
+  "labels": [
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "request body exceeded maximum size of 1048576 bytes during instance start",
+  "id": 448,
+  "labels": [
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Anduril: Ability to pull real time cpu usage by sled",
+  "id": 450,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "2 - Normal",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "VM-to-VM Network Performance",
+  "id": 454,
+  "labels": [
+    "type:enhancement",
+    "customer:shopify",
+    "customer:switch",
+    "customer:anduril"
+  ],
+  "status": "4 - In progress",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Native Auto-Scaling Support",
+  "id": 455,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "3 - Low",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "K8s controller for cluster autoscaler",
+  "id": 456,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "2 - Normal",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Service Accounts Support",
+  "id": 457,
+  "labels": [
+    "type:wishlist",
+    "customer:shopify",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Instance Profile support (similar to AWS feature)",
+  "id": 458,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "2 - Normal",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Extracting Metrics into Third-Party Storage",
+  "id": 459,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "y"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Custom Profiles Support or Ability to Define Granular RBAC roles",
+  "id": 460,
+  "labels": [
+    "type:wishlist",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "1 - High",
+  "on_roadmap": "n"
+}
+{
+  "item_type": "Issue",
+  "custom_type": null,
+  "title": "Yubikey Challenge with US Federal Customers",
+  "id": 461,
+  "labels": [
+    "customer:inl",
+    "type:wishlist",
+    "customer:llnl",
+    "customer:iqt",
+    "prodsec",
+    "customer:anduril"
+  ],
+  "status": "1 - Pending triage",
+  "anduril_priority": "2 - Normal",
+  "on_roadmap": "y"
+}

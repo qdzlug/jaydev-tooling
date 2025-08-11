@@ -1,0 +1,11 @@
+- name: Get path to zsh
+  command: which zsh
+  register: zsh_path
+  changed_when: false
+  failed_when: zsh_path.rc != 0
+
+- name: Set zsh as default shell for user if not already
+  user:
+    name: "{{ new_user }}"
+    shell: "{{ zsh_path.stdout }}"
+  when: zsh_path.stdout is defined

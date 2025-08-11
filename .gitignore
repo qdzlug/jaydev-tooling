@@ -79,6 +79,8 @@ ehthumbs.db
 
 # JetBrains IDEs (PyCharm, IntelliJ, etc.)
 .idea/
+.ansible-lint/
 
 # OS-generated files
 desktop.ini
+

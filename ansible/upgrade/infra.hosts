@@ -1,0 +1,49 @@
+[infra:vars]
+ansible_user=ubuntu
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_become_pass=kube
+ansible_python_interpreter=/usr/bin/python3
+
+[infra]
+nasunifi.virington.com ansible_user=unifi
+pihole.virington.com ansible_user=pihole
+gallium.virington.com ansible_user=jschmidt
+tailnas.virington.com ansible_user=jschmidt
+
+[pi:vars]
+ansible_user=jschmidt
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_python_interpreter=/usr/bin/python3
+
+[pi]
+primus.virington.com
+secundus.virington.com
+tertius.virington.com
+quartus.virington.com
+quintus.virington.com
+
+
+[internet:vars]
+ansible_user=jschmidt
+ansible_become=yes  
+ansible_become_method=sudo 
+ansible_become_pass=PeanutTime2019!
+ansible_python_interpreter=/usr/bin/python3
+
+[internet]
+timmy.virington.com
+wanda.virington.com
+cosmo.virington.com
+
+[proxmox:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[proxmox]
+prox01.virington.com ansible_user=root
+prox02.virington.com ansible_user=root
+prox03.virington.com ansible_user=root
+prox04.virington.com ansible_user=root
+prox05.virington.com ansible_user=root
+prox06.virington.com ansible_user=root

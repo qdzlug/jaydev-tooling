@@ -1,11 +1,21 @@
-- name: Get path to zsh
+- name: Check if Zsh is installed
   command: which zsh
   register: zsh_path
   changed_when: false
   failed_when: zsh_path.rc != 0
+  when: use_zsh | default(false)
 
-- name: Set zsh as default shell for user if not already
+- name: Get current shell for user
+  command: getent passwd "{{ new_user }}"
+  register: current_shell
+  changed_when: false
+  when: use_zsh | default(false)
+
+- name: Set zsh as default shell for user
   user:
     name: "{{ new_user }}"
     shell: "{{ zsh_path.stdout }}"
-  when: zsh_path.stdout is defined
+  when:
+    - use_zsh | default(false)
+    - zsh_path.stdout is defined
+    - "'{{ zsh_path.stdout }}' not in current_shell.stdout"
